@@ -3,8 +3,13 @@ package heapSort;
 import java.util.Random;
 
 public class HeapSort {
+    private int comparisons = 0; // Class-level variable to count comparisons
+
     public void sort(int[] arr) {
         int n = arr.length;
+
+        // Reset the comparisons counter each time sort is called
+        comparisons = 0;
 
         // Build heap (rearrange array)
         for (int i = n / 2 - 1; i >= 0; i--)
@@ -28,12 +33,16 @@ public class HeapSort {
         int right = 2 * i + 2;
 
         // If left child is larger than root
-        if (left < n && arr[left] > arr[largest])
+        if (left < n && arr[left] > arr[largest]) {
             largest = left;
+            comparisons++; // Increment for this comparison
+        }
 
         // If right child is larger than largest so far
-        if (right < n && arr[right] > arr[largest])
+        if (right < n && arr[right] > arr[largest]) {
             largest = right;
+            comparisons++; // Increment for this comparison
+        }
 
         // If largest is not root
         if (largest != i) {
@@ -46,15 +55,16 @@ public class HeapSort {
         }
     }
 
-    // A utility function to print the array
-    static void printArray(int[] arr) {
+    // A utility function to print the array and number of comparisons
+    static void printArray(int[] arr, int comparisons) {
         int n = arr.length;
         for (int i = 0; i < n; ++i)
             System.out.print(arr[i] + " ");
         System.out.println();
+        System.out.println("Total comparisons made: " + comparisons);
     }
-    
-    //Generates an Array of the given size between 1 and the specified max. 
+
+    // Generates an array of the given size with values between 1 and the specified max
     public static int[] generateRandomArray(int size, int max) {
         int[] randomArray = new int[size];
         Random random = new Random();
@@ -66,17 +76,16 @@ public class HeapSort {
         }
         return randomArray;
     }
-    
+
     public static void main(String[] args) {
-    	// starting array randomly generated, 10 elements, between 1 and max, which is 100. 
-    	int[] arr= generateRandomArray(10,100);
-        int n = arr.length;
+        // starting array randomly generated, 10 elements, between 1 and max, which is 100.
+        int[] arr = generateRandomArray(10, 100);
 
         HeapSort heapSort = new HeapSort();
         heapSort.sort(arr);
-        
-        //output
+
+        // Output
         System.out.println("Sorted array:");
-        printArray(arr);
+        printArray(arr, heapSort.comparisons); // Pass comparisons to the print method
     }
 }
