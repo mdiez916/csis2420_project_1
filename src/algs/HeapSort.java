@@ -1,23 +1,34 @@
 package algs;
 
+import java.util.List;
 import java.util.Random;
 
+/**
+ * @author Group 2
+ */
 public class HeapSort {
-    private int comparisons = 0; // Class-level variable to count comparisons
+    // Tracks the number of comparisons during sorting
+    public int comparisons = 0;
 
-    public void sort(int[] arr) {
+    /**
+     * Sorts an array using heap sort algorithm and returns the number of comparisons made.
+     * This method first builds a max heap and then extracts elements from the heap
+     * to get them in sorted order.
+     *
+     * @param arr The array to be sorted.
+     * @return The count of comparisons made during the sort.
+     */
+    public int sort(int[] arr) {
         int n = arr.length;
+        comparisons = 0; // Reset comparisons at the start
 
-        // Reset the comparisons counter each time sort is called
-        comparisons = 0;
-
-        // Build heap (rearrange array)
+        // Build heap (rearrange array into a max heap)
         for (int i = n / 2 - 1; i >= 0; i--)
             heapify(arr, n, i);
 
         // One by one extract an element from heap
-        for (int i = n - 1; i >= 0; i--) {
-            // Move current root to end
+        for (int i = n - 1; i > 0; i--) {
+            // Move current root to end (swap arr[0] with arr[i])
             int temp = arr[0];
             arr[0] = arr[i];
             arr[i] = temp;
@@ -25,23 +36,50 @@ public class HeapSort {
             // Call max heapify on the reduced heap
             heapify(arr, i, 0);
         }
+        return comparisons;
     }
 
-    void heapify(int[] arr, int n, int i) {
-        int largest = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
+    /**
+     * Overloaded sort method to accept a List<Integer>, sort it, and return the number of comparisons.
+     *
+     * @param list The list of integers to be sorted.
+     * @return The count of comparisons made during the sort.
+     */
+    public int sort(List<Integer> list) {
+        // Convert List<Integer> to int[] for sorting
+        int[] arr = list.stream().mapToInt(i -> i).toArray();
+        int comps = sort(arr); // Sort the array and get the number of comparisons
+
+        // Update the list with the sorted array
+        for (int i = 0; i < arr.length; i++) {
+            list.set(i, arr[i]);
+        }
+        return comps;
+    }
+
+    /**
+     * Maintains the heap property for a subtree rooted with node i, which is an index in arr[].
+     * n is the size of the heap.
+     *
+     * @param arr The array representation of the heap.
+     * @param n The size of the heap.
+     * @param i The index of the root element of the current subtree.
+     */
+    private void heapify(int[] arr, int n, int i) {
+        int largest = i; // Initialize largest as root
+        int left = 2 * i + 1; // left = 2*i + 1
+        int right = 2 * i + 2; // right = 2*i + 2
 
         // If left child is larger than root
         if (left < n && arr[left] > arr[largest]) {
             largest = left;
-            comparisons++; // Increment for this comparison
+            comparisons++;
         }
 
         // If right child is larger than largest so far
         if (right < n && arr[right] > arr[largest]) {
             largest = right;
-            comparisons++; // Increment for this comparison
+            comparisons++;
         }
 
         // If largest is not root
@@ -50,42 +88,57 @@ public class HeapSort {
             arr[i] = arr[largest];
             arr[largest] = swap;
 
-            // Recursively heapify
+            // Recursively heapify the affected sub-tree
             heapify(arr, n, largest);
         }
     }
 
-    // A utility function to print the array and number of comparisons
-    static void printArray(int[] arr, int comparisons) {
-        int n = arr.length;
-        for (int i = 0; i < n; ++i)
-            System.out.print(arr[i] + " ");
+    /**
+     * Utility function to print the array on the console.
+     *
+     * @param arr The array to be printed.
+     */
+    public static void printArray(int[] arr) {
+        for (int value : arr) {
+            System.out.print(value + " ");
+        }
         System.out.println();
-        System.out.println("Total comparisons made: " + comparisons);
+    }
+    
+    /**
+     * Returns the total number of comparisons made during the last sort operation.
+     *
+     * @return The number of comparisons.
+     */
+    public int getComparisons() {
+        return comparisons;
     }
 
-    // Generates an array of the given size with values between 1 and the specified max
+    /**
+     * Generates an array of the given size filled with random values up to a specified max.
+     *
+     * @param size The size of the array to generate.
+     * @param max The maximum value for elements in the array.
+     * @return An int array filled with random numbers.
+     */
     public static int[] generateRandomArray(int size, int max) {
-        int[] randomArray = new int[size];
         Random random = new Random();
-
+        int[] arr = new int[size];
         for (int i = 0; i < size; i++) {
-            // Generate random number between 1 and max
-            int randomNumber = random.nextInt(max) + 1;
-            randomArray[i] = randomNumber;
+            arr[i] = random.nextInt(max) + 1; // Elements range from 1 to max
         }
-        return randomArray;
+        return arr;
     }
 
     public static void main(String[] args) {
-        // starting array randomly generated, 10 elements, between 1 and max, which is 100.
-        int[] arr = generateRandomArray(10, 100);
-
         HeapSort heapSort = new HeapSort();
-        heapSort.sort(arr);
 
-        // Output
+        // Example: Sorting a single array
+        int[] arr = generateRandomArray(10, 100);
+        int comparisons = heapSort.sort(arr);
+
         System.out.println("Sorted array:");
-        printArray(arr, heapSort.comparisons); // Pass comparisons to the print method
+        printArray(arr);
+        System.out.println("Total comparisons made: " + comparisons);
     }
 }

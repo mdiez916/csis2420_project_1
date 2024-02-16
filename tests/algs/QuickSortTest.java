@@ -1,56 +1,61 @@
 package algs;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+import java.util.List;
 
+/**
+ * Test cases for QuickSort class.
+ */
 public class QuickSortTest {
 
 	@Test
-	public void testQuickSort_givenArray_sortsArray() {
-		int[] arr = { 10, 7, 8, 9, 1, 5 };
-		int[] expected = { 1, 5, 7, 8, 9, 10 };
-		QuickSort.quickSort(arr, 0, arr.length - 1);
-		assertArrayEquals(expected, arr, "The array should be sorted");
-	}
-
-	@Test
-	public void testQuickSort_alreadySortedArray_keepsArraySorted() {
-		int[] arr = { 1, 5, 7, 8, 9, 10 };
-		int[] expected = { 1, 5, 7, 8, 9, 10 };
-		QuickSort.quickSort(arr, 0, arr.length - 1);
-		assertArrayEquals(expected, arr, "The already sorted array should remain sorted");
-	}
-
-	@Test
-	public void testQuickSort_reverseSortedArray_sortsArray() {
-		int[] arr = { 10, 9, 8, 7, 5, 1 };
-		int[] expected = { 1, 5, 7, 8, 9, 10 };
-		QuickSort.quickSort(arr, 0, arr.length - 1);
-		assertArrayEquals(expected, arr, "The reverse sorted array should be sorted");
-	}
-
-	@Test
-	public void testQuickSort_arrayWithDuplicates_sortsArray() {
-		int[] arr = { 5, 7, 8, 9, 1, 5 };
-		int[] expected = { 1, 5, 5, 7, 8, 9 };
-		QuickSort.quickSort(arr, 0, arr.length - 1);
-		assertArrayEquals(expected, arr, "The array with duplicates should be sorted");
-	}
-
-	@Test
-	public void testQuickSort_singleElementArray_keepsArraySame() {
-		int[] arr = { 1 };
-		int[] expected = { 1 };
-		QuickSort.quickSort(arr, 0, arr.length - 1);
-		assertArrayEquals(expected, arr, "The single element array should remain the same");
-	}
-
-	@Test
-	public void testQuickSort_emptyArray_keepsArrayEmpty() {
+	public void testSortEmptyArray() {
+		QuickSort sorter = new QuickSort();
 		int[] arr = {};
-		int[] expected = {};
-		QuickSort.quickSort(arr, 0, arr.length - 1);
-		assertArrayEquals(expected, arr, "The empty array should remain empty");
+		sorter.quickSort(arr, 0, arr.length - 1);
+		assertArrayEquals(new int[] {}, arr, "The sorted empty array should be equal to the original empty array.");
+	}
+
+	@Test
+	public void testSortSingleElement() {
+		QuickSort sorter = new QuickSort();
+		int[] arr = { 1 };
+		sorter.quickSort(arr, 0, arr.length - 1);
+		assertArrayEquals(new int[] { 1 }, arr, "The sorted single-element array should be unchanged.");
+	}
+
+	@Test
+	public void testSortArray() {
+		QuickSort sorter = new QuickSort();
+		int[] arr = { 4, 3, 2, 1 };
+		sorter.quickSort(arr, 0, arr.length - 1);
+		assertArrayEquals(new int[] { 1, 2, 3, 4 }, arr, "The array should be sorted in ascending order.");
+	}
+
+	@Test
+	public void testSortList() {
+		QuickSort sorter = new QuickSort();
+		List<Integer> list = Arrays.asList(4, 3, 2, 1);
+		sorter.sort(list);
+		assertEquals(Arrays.asList(1, 2, 3, 4), list, "The list should be sorted in ascending order.");
+	}
+
+	@Test
+	public void testComparisonsAfterSort() {
+		QuickSort sorter = new QuickSort();
+		int[] arr = { 5, 4, 3, 2, 1 };
+		sorter.quickSort(arr, 0, arr.length - 1);
+		assertTrue(sorter.getComparisons() > 0, "There should be some comparisons made to sort the array.");
+	}
+
+	@Test
+	public void testSortAlreadySortedArray() {
+		QuickSort sorter = new QuickSort();
+		int[] arr = { 1, 2, 3, 4, 5 };
+		sorter.quickSort(arr, 0, arr.length - 1);
+		assertArrayEquals(new int[] { 1, 2, 3, 4, 5 }, arr, "Sorting an already sorted array should not change it.");
 	}
 }

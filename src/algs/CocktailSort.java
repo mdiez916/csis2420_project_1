@@ -1,64 +1,86 @@
 package algs;
 
+import java.util.List;
+
+/**
+ * @author Group 2
+ */
 public class CocktailSort {
-    private int comparisons = 0; // Class-level variable to count comparisons
+    private int comparisons = 0; // Tracks the number of comparisons made during sorting.
 
-    void cocktailSort(int a[]) {
-        boolean swapped = true;
-        int start = 0;
-        int end = a.length;
+    /**
+     * Performs a Cocktail Sort on the given array.
+     * Cocktail Sort is a variation of Bubble Sort that traverses the array in both directions.
+     * This approach helps to tackle the turtle and rabbit problem seen in Bubble Sort.
+     *
+     * @param a The array to be sorted.
+     */
+    public void cocktailSort(int[] a) {
+        boolean swapped = true; // Flag to keep track of whether any swaps were made in the current pass.
+        int start = 0; // Starting index of the current pass.
+        int end = a.length; // Ending index of the current pass.
 
-        // Reset the comparisons counter each time cocktailSort is called
-        comparisons = 0;
+        comparisons = 0; // Reset the comparisons counter at the start of the sort.
 
         while (swapped) {
-            swapped = false;
+            swapped = false; // Assume no swaps will be made in this pass.
 
+            // Forward pass: from start to just before the end.
             for (int i = start; i < end - 1; ++i) {
-                comparisons++; // Increment the counter for each comparison
-                if (a[i] > a[i + 1]) {
+                comparisons++; // Count each comparison.
+                if (a[i] > a[i + 1]) { // If the current element is greater than the next element, swap them.
                     int temp = a[i];
                     a[i] = a[i + 1];
                     a[i + 1] = temp;
-                    swapped = true;
+                    swapped = true; // Mark that a swap has occurred, indicating the list is not yet sorted.
                 }
             }
 
-            if (!swapped)
-                break;
+            if (!swapped) break; // If no swaps were made in the forward pass, the array is sorted.
 
-            swapped = false;
+            swapped = false; // Reset swap flag for the backward pass.
+            end--; // Decrement the end index since the last element is now sorted.
 
-            end = end - 1;
-
+            // Backward pass: from the end back to the start.
             for (int i = end - 1; i >= start; i--) {
-                comparisons++; // Increment the counter for each comparison
-                if (a[i] > a[i + 1]) {
+                comparisons++; // Count each comparison.
+                if (a[i] > a[i + 1]) { // If the current element is greater than the next element, swap them.
                     int temp = a[i];
                     a[i] = a[i + 1];
                     a[i + 1] = temp;
-                    swapped = true;
+                    swapped = true; // Mark that a swap has occurred.
                 }
             }
 
-            start = start + 1;
+            start++; // Increment the start index as the first element is now sorted for the next pass.
         }
     }
 
-    void printArray(int a[]) {
-        int n = a.length;
-        for (int i = 0; i < n; i++)
-            System.out.print(a[i] + " ");
-        System.out.println();
-        // Print the total number of comparisons after the array
-        System.out.println("Total comparisons made: " + comparisons);
+    /**
+     * Overloaded method to sort a List<Integer>.
+     *
+     * @param list The list of integers to be sorted.
+     */
+    public void sort(List<Integer> list) {
+        // Convert List<Integer> to int[] for sorting.
+        int[] arr = list.stream().mapToInt(i -> i).toArray();
+
+        comparisons = 0; // Reset comparisons counter before sorting.
+
+        cocktailSort(arr); // Perform the sort on the array.
+
+        // Update the original list with the sorted values.
+        for (int i = 0; i < arr.length; i++) {
+            list.set(i, arr[i]);
+        }
     }
 
-    public static void main(String[] args) {
-        CocktailSort ob = new CocktailSort();
-        int a[] = { 5, 1, 4, 2, 8, 0, 2 };
-        ob.cocktailSort(a);
-        System.out.println("Sorted array:");
-        ob.printArray(a);
+    /**
+     * Returns the number of comparisons made during the sort.
+     *
+     * @return The number of comparisons.
+     */
+    public int getComparisons() {
+        return comparisons;
     }
 }
