@@ -1,4 +1,4 @@
-package cocktailSort;
+package algs;
 
 public class CocktailSort {
     private int comparisons = 0; // Class-level variable to count comparisons

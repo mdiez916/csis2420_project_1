@@ -1,10 +1,10 @@
-package heapSort;
+package algs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class heapSortTests {
+public class HeapSortTest {
 
     @Test
     public void testSort_givenArray_sortsArray() {

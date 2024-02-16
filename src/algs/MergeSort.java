@@ -1,4 +1,4 @@
-package mergeSort;
+package algs;
 
 class MergeSort {
     private int comparisons = 0; // Class-level variable to count comparisons

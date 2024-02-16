@@ -1,4 +1,4 @@
-package heapSort;
+package algs;
 
 import java.util.Random;
 
