@@ -1,85 +1,108 @@
 package algs;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-/**
- * Driver code to run each algorithm at array length n and each permutation.
- * @author Group 2
- */
 public class Client {
 
-	public static void main(String[] args) {
-		ArrayGenerator arrGen = new ArrayGenerator();
-		int arrLength = 4; // Change this to test different array lengths and its permutations.
-//	 	With 6 and 8 array lengths, output is too large to fit in console. Comment in/out algs if necessary.
+	static class SortingResult {
+	    List<Integer> originalPermutation;
+	    List<Integer> sortedPermutation;
+	    double timeInSeconds;
+	    int comparisons;
 
-		List<List<Integer>> permutations = arrGen.getPermutations();
-
-
-//      Timing HeapSort
-
-		arrGen.generatePermutations(arrLength);
-		HeapSort heapSort = new HeapSort();
-		System.out.println("Heap Sort");
-		timeSort(permutations, heapSort);
-
-//       Timing MergeSort
-
-//        arrGen.generatePermutations(arrLength);
-//        permutations = arrGen.getPermutations();
-//        MergeSort mergeSort = new MergeSort();
-//        System.out.println("Merge Sort");
-//        timeSort(permutations, mergeSort);
-
-//        Timing QuickSort
-
-//        arrGen.generatePermutations(arrLength);
-//        permutations = arrGen.getPermutations();
-//        QuickSort quickSort = new QuickSort();
-//        System.out.println("Quick Sort");
-//        timeSort(permutations, quickSort);
-
-//        Timing CocktailSort
-
-//        arrGen.generatePermutations(arrLength);
-//        permutations = arrGen.getPermutations();
-//        CocktailSort cocktailSort = new CocktailSort();
-//        System.out.println("Cocktail Sort");
-//        timeSort(permutations, cocktailSort);
+	    public SortingResult(List<Integer> originalPermutation, List<Integer> sortedPermutation, double timeInSeconds, int comparisons) {
+	        this.originalPermutation = new ArrayList<>(originalPermutation); // Store the original permutation
+	        this.sortedPermutation = new ArrayList<>(sortedPermutation); // Store the sorted permutation for clarity
+	        this.timeInSeconds = timeInSeconds;
+	        this.comparisons = comparisons;
+	    }
 	}
 
-	/**
-	 * Calls the associated alg sort method and passes in the permutation.
-	 * 
-	 * @param permutations
-	 * @param alt
-	 */
-	private static void timeSort(List<List<Integer>> permutations, Object alg) {
-		for (List<Integer> permutation : permutations) {
-			System.out.println("Before sorting: " + permutation);
-			long startTime = System.nanoTime();
-			int comparisons = 0;
-			if (alg instanceof HeapSort) {
-				comparisons = ((HeapSort) alg).sort(permutation);
-			} else if (alg instanceof MergeSort) {
-				((MergeSort) alg).sort(permutation);
-				comparisons = ((MergeSort) alg).getComparisons();
-			} else if (alg instanceof QuickSort) {
-				((QuickSort) alg).sort(permutation);
-				comparisons = ((QuickSort) alg).getComparisons();
-			} else if (alg instanceof CocktailSort) {
-				((CocktailSort) alg).sort(permutation);
-				comparisons = ((CocktailSort) alg).getComparisons();
-			}
-			long endTime = System.nanoTime();
-			long durationNano = endTime - startTime;
-			double durationSeconds = durationNano / 1_000_000_000.0; // Convert nanoseconds to seconds
-			System.out.println("After sorting: " + permutation);
-			System.out.println("Comparisons made: " + comparisons);
-			// Format to 6 decimal points
-			System.out.println(String.format("Time taken: %.6f seconds\n", durationSeconds));
-		}
-		System.out.println("----------------------------------------");
-		System.out.println("");
-	}
+    public static void main(String[] args) {
+        ArrayGenerator arrGen = new ArrayGenerator();
+        int arrLength = 8; // Modify as needed to test different array lengths
+        arrGen.generatePermutations(arrLength);
+        List<List<Integer>> permutations = arrGen.getPermutations();
+
+        // HeapSort as an example. Repeat similar blocks for other sorting algorithms.
+        HeapSort heapSort = new HeapSort();
+        System.out.println("Heap Sort Results:");
+        List<SortingResult> heapSortResults = timeSort(permutations, heapSort);
+        processAndDisplayResults(heapSortResults);
+        
+        MergeSort mergeSort = new MergeSort();
+        System.out.println("Merge Sort Results:");
+        List<SortingResult> mergeSortResults = timeSort(permutations, mergeSort);
+        processAndDisplayResults(mergeSortResults);
+        
+        QuickSort quickSort = new QuickSort();
+        System.out.println("Quick Sort Results:");
+        List<SortingResult> quickSortResults = timeSort(permutations, quickSort);
+        processAndDisplayResults(quickSortResults);
+        
+        CocktailSort cocktailSort = new CocktailSort();
+        System.out.println("Cocktail Sort Results:");
+        List<SortingResult> cockTailSortResults = timeSort(permutations, cocktailSort);
+        processAndDisplayResults(cockTailSortResults);
+    }
+
+    private static List<SortingResult> timeSort(List<List<Integer>> permutations, Object alg) {
+        List<SortingResult> results = new ArrayList<>();
+        for (List<Integer> originalPermutation : permutations) {
+            // Make a copy of the original permutation to sort, preserving the original
+            List<Integer> permutationToSort = new ArrayList<>(originalPermutation);
+
+            long startTime = System.nanoTime();
+            int comparisons = 0;
+
+            // Sort the copy, not the original
+            if (alg instanceof HeapSort) {
+                comparisons = ((HeapSort) alg).sort(permutationToSort);
+            } else if (alg instanceof MergeSort) {
+                ((MergeSort) alg).sort(permutationToSort);
+                comparisons = ((MergeSort) alg).getComparisons();
+            } else if (alg instanceof QuickSort) {
+                ((QuickSort) alg).sort(permutationToSort);
+                comparisons = ((QuickSort) alg).getComparisons();
+            } else if (alg instanceof CocktailSort) {
+                ((CocktailSort) alg).sort(permutationToSort);
+                comparisons = ((CocktailSort) alg).getComparisons();
+            }
+
+            long endTime = System.nanoTime();
+            double durationSeconds = (endTime - startTime) / 1_000_000_000.0;
+            
+            // Add both the original and the sorted permutations to the results
+            results.add(new SortingResult(originalPermutation, permutationToSort, durationSeconds, comparisons));
+        }
+        return results;
+    }
+
+    private static void processAndDisplayResults(List<SortingResult> results) {
+        // Sort results by time to find best and worst cases
+        results.sort(Comparator.comparingDouble(r -> r.timeInSeconds));
+
+        System.out.println("10 Best Cases:");
+        results.stream().limit(10).forEach(Client::printResult);
+
+        System.out.println("\n10 Worst Cases:");
+        results.stream().skip(Math.max(0, results.size() - 10)).forEach(Client::printResult);
+
+        // Calculate averages
+        double averageTime = results.stream().mapToDouble(r -> r.timeInSeconds).average().orElse(0);
+        double averageComparisons = results.stream().mapToInt(r -> r.comparisons).average().orElse(0);
+
+        System.out.printf("\nAverage Time: %.8f seconds\n", averageTime);
+        System.out.printf("Average Comparisons: %.0f\n", averageComparisons);
+        System.out.println("----------------------------------------\n");
+    }
+
+    private static void printResult(SortingResult result) {
+        System.out.println("Original Permutation: " + result.originalPermutation 
+            + ", Sorted Permutation: " + result.sortedPermutation 
+            + ", Time: " + String.format("%.8f", result.timeInSeconds) + " seconds" 
+            + ", Comparisons: " + result.comparisons);
+    }
 }
