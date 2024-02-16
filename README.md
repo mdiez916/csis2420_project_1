@@ -38,5 +38,42 @@ Comparisons = `avg growth rate * 12 * log_2(12)`.
   
   `n = 12` results in approximately 24 comparisons.
 
-
+### Merge Sort
   
+1.
+
+- Big O
+  
+  In the worst cases, for `n = 4`, `n = 6` and `n = 8`, we see a growth of `5`, `11` and `17` comparisons respectively. This   indicates `O(n log n)`. 
+
+- Big Omega
+
+  In the best cases, for `n = 4`, `n = 6` and `n = 8`, the growth of comparisons is `4`, `9`, and `14`. Indicating `O(n log n)`.
+
+- Big Theta
+
+  Because both best and worst cases indicate the same complexities of `O(n log n)`, the average case suggests `O(n log n)`     as well.
+
+2.
+
+The performance stays relatively the same for best, worst, and average, indicating that Merge Sort has a stable performance with different permutations.
+
+
+3.
+
+for `n = 12`, we can calculate the expected number of comparisons with `O(n log n)` due to the best, worst, and average cases:
+
+Comparisons = `avg growth rate * 12 * log_2(12)`.
+
+- Worst
+  for `n = 4`, `n = 6` and `n = 8` gives a growth rate `.63`, `.71`, `.71`.
+  
+  `n = 12` results in approximately 29 comparisons.
+- Best
+  for `n = 4`, `n = 6` and `n = 8` gives a growth rate `.50`, `.58`, `.58`.
+  
+  `n = 12` results in approximately 24 comparisons.
+- Average
+  for `n = 4`, `n = 6` and `n = 8` gives a growth rate `.56`, `.64`, `.65`.
+  
+  `n = 12` results in approximately 27 comparisons.
