@@ -32,7 +32,7 @@ Comparisons = `avg growth rate * 12 * log_2(12)`.
 - Best
   for `n = 4`, `n = 6` and `n = 8` gives a growth rate `.25`, `.32`, `.46`.
   
-  `n = 15` results in approximately 15 comparisons.
+  `n = 12` results in approximately 15 comparisons.
 - Average
   for `n = 4`, `n = 6` and `n = 8` gives a growth rate `.5`, `.58`, `.63`.
   
